@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Tic Tac Toe</string>
+    <string name="X">X</string>
+    <string name="O">O</string>
+    <string name="reset">Play Again</string>
+    <string name="match">Match 3 to win</string>
+    <string name="title">Tic Tac Toe</string>
+    <string name="action_settings">Settings</string>
+</resources>
