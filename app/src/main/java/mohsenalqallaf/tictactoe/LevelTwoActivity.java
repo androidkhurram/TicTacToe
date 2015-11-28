@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -31,7 +30,7 @@ public class LevelTwoActivity extends Activity {
         setContentView(R.layout.play_with_human);
         setupOnClickListeners();
         // initializeViews Views
-        txtPlayAgain = (TextView)findViewById(R.id.thing);
+        txtPlayAgain = (TextView)findViewById(R.id.resetGame);
         txtGameStatus = (TextView) findViewById(R.id.txtStatus);
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.click);
         mediaPlayerWinning = MediaPlayer.create(getApplicationContext(), R.raw.winning);

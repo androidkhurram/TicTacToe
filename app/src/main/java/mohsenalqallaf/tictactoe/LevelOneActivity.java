@@ -2,7 +2,6 @@ package mohsenalqallaf.tictactoe;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class LevelOneActivity extends Activity {
 	//Declare global variables for the game space
@@ -29,7 +27,7 @@ public class LevelOneActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		//Look at the right XML layout and remove the action bar
-		setContentView(R.layout.level_one);
+		setContentView(R.layout.play_with_ai);
 		mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.click);
 		mediaPlayerWinning = MediaPlayer.create(getApplicationContext(), R.raw.winning);
 		// initialize Views

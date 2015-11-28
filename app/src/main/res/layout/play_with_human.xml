@@ -36,7 +36,7 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="0dp"
 	    android:layout_weight="1"
-	    android:background="#FF5722"
+	    android:background="@color/button_color"
 	    android:keepScreenOn="true" >
 
 	    <TableRow 
@@ -176,7 +176,7 @@
 		android:orientation="horizontal"
 		android:background="#673AB7">
 		<TextView
-		    android:id="@+id/thing"
+		    android:id="@+id/resetGame"
 		    android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/reset"
