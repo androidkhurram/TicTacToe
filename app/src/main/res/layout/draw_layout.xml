@@ -1,0 +1,34 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="150dp"
+        android:text="No One Wins"
+        android:textSize="@dimen/heading" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="80dp"
+        android:text="Game DRAW!!"
+        android:textSize="@dimen/congo" />
+
+    <Button
+        android:id="@+id/drawBack"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_gravity="right"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="70dp"
+        android:background="@color/button_color"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="Play Again" />
+</LinearLayout>

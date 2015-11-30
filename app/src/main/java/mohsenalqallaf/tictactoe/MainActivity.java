@@ -46,18 +46,19 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),
-                        LevelTwoActivity.class);
+                        PlayerDetailActivity.class);
                 startActivity(intent);
             }
         });
     }
+
     // initialize all views
-    private void initializeViews()
-    {
-        linWithCom = (LinearLayout)findViewById(R.id.lin_withcom);
-        linWithHum = (LinearLayout)findViewById(R.id.lin_withhum);
-        txtBlinkTitle= (TextView)findViewById(R.id.txtHeading);
+    private void initializeViews() {
+        linWithCom = (LinearLayout) findViewById(R.id.lin_withcom);
+        linWithHum = (LinearLayout) findViewById(R.id.lin_withhum);
+        txtBlinkTitle = (TextView) findViewById(R.id.txtHeading);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

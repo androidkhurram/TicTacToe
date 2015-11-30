@@ -1,13 +1,18 @@
 package mohsenalqallaf.tictactoe;
+
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by Faizan on 23/11/2015.
@@ -15,227 +20,159 @@ import android.widget.TextView;
 
 public class LevelTwoActivity extends Activity {
 
-    // Representing the game state:
-    private boolean noughtsTurn = false; // Who's turn is it? false=X true=O
-    private char board[][] = new char[3][3]; // for now we will represent the board as an array of characters
-    private TextView txtPlayAgain, txtGameStatus;
-    private MediaPlayer mediaPlayer, mediaPlayerWinning;
+    private String p1, p2;
+    private static int i = 0;
+    private int j;
+    private GridView gridview;
+    private TextView txtStatus;
+    private static final String[] symbols = new String[]{"", "", "", "", "", "", "", "", ""};
+    private int visitedp1[] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
+    private int visitedp2[] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
+    private MediaPlayer mediaPlayer;
 
-    /**
-     * Called when the activity is first created.
-     */
+    private final Context context = this;
+
+    public void check(int visitedp1[], int visitedp2[]) {
+        int flag = 0;
+        String winner = null;
+
+        //player1
+        if ((visitedp1[0] == 1) && (visitedp1[4] == 1) && (visitedp1[8] == 1)) {
+            flag = 1;
+            winner = "Player 1";
+        } else if ((visitedp1[2] == 1) && (visitedp1[4] == 1) && (visitedp1[6] == 1)) {
+            flag = 1;
+            winner = "Player 1";
+        } else if ((visitedp1[0] == 1) && (visitedp1[3] == 1) && (visitedp1[6] == 1)) {
+            flag = 1;
+            winner = "Player 1";
+        } else if ((visitedp1[1] == 1) && (visitedp1[4] == 1) && (visitedp1[7] == 1)) {
+            flag = 1;
+            winner = "Player 1";
+        } else if ((visitedp1[2] == 1) && (visitedp1[5] == 1) && (visitedp1[8] == 1)) {
+            flag = 1;
+            winner = "Player 1";
+        } else if ((visitedp1[0] == 1) && (visitedp1[1] == 1) && (visitedp1[2] == 1)) {
+            flag = 1;
+            winner = "Player 1";
+        } else if ((visitedp1[3] == 1) && (visitedp1[4] == 1) && (visitedp1[5] == 1)) {
+            flag = 1;
+            winner = "Player 1";
+        } else if ((visitedp1[6] == 1) && (visitedp1[7] == 1) && (visitedp1[8] == 1)) {
+            flag = 1;
+            winner = "Player 1";
+        }
+
+        //player2
+        if ((visitedp2[0] == 1) && (visitedp2[4] == 1) && (visitedp2[8] == 1)) {
+            flag = 1;
+            winner = "Player 2";
+        } else if ((visitedp2[2] == 1) && (visitedp2[4] == 1) && (visitedp2[6] == 1)) {
+            flag = 1;
+            winner = "Player 2";
+        } else if ((visitedp2[0] == 1) && (visitedp2[3] == 1) && (visitedp2[6] == 1)) {
+            flag = 1;
+            winner = "Player 2";
+        } else if ((visitedp2[1] == 1) && (visitedp2[4] == 1) && (visitedp2[7] == 1)) {
+            flag = 1;
+            winner = "Player 2";
+        } else if ((visitedp2[2] == 1) && (visitedp2[5] == 1) && (visitedp2[8] == 1)) {
+            flag = 1;
+            winner = "Player 2";
+        } else if ((visitedp2[0] == 1) && (visitedp2[1] == 1) && (visitedp2[2] == 1)) {
+            flag = 1;
+            winner = "Player 2";
+        } else if ((visitedp2[3] == 1) && (visitedp2[4] == 1) && (visitedp2[5] == 1)) {
+            flag = 1;
+            winner = "Player 2";
+        } else if ((visitedp2[6] == 1) && (visitedp2[7] == 1) && (visitedp2[8] == 1)) {
+            flag = 1;
+            winner = "Player 2";
+        }
+
+        if (flag == 1) {
+            Intent i = new Intent(context, WinGame.class);
+            i.putExtra("winner", winner);
+            startActivity(i);
+            finish();
+
+        }
+        if (i == 8) {
+            Intent gamedraw = new Intent(context, DrawGame.class);
+            startActivity(gamedraw);
+            finish();
+        }
+    }
+
+    TextView t;
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+
+        for (int k = 0; k < 9; ++k) {
+            visitedp1[k] = -1;
+            visitedp2[k] = -1;
+        }
+        i = 0;
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.play_with_human);
-        setupOnClickListeners();
-        // initializeViews Views
-        txtPlayAgain = (TextView)findViewById(R.id.resetGame);
-        txtGameStatus = (TextView) findViewById(R.id.txtStatus);
-        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.click);
-        mediaPlayerWinning = MediaPlayer.create(getApplicationContext(), R.raw.winning);
-        txtPlayAgain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                newGame(v);
-            }
-        });
+        setContentView(R.layout.play_with_hum);
+        // initialize Views
+        txtStatus = (TextView) findViewById(R.id.txtStatus);
         Animation anim = new AlphaAnimation(0.0f, 1.0f);
         anim.setDuration(500); //You can manage the blinking time with this parameter
         anim.setStartOffset(20);
         anim.setRepeatMode(Animation.REVERSE);
         anim.setRepeatCount(Animation.INFINITE);
-        txtGameStatus.startAnimation(anim);
-        resetButtons();
-    }
+        txtStatus.startAnimation(anim);
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.click);
+        Intent intent = getIntent();
+        p1 = intent.getStringExtra("Player1");
+        p2 = intent.getStringExtra("Player2");
 
-    /**
-     * Called when you press new game.
-     *
-     * @param view the New Game Button
-     */
-    public void newGame(View view) {
-        noughtsTurn = false;
-        board = new char[3][3];
-        resetButtons();
-    }
-
-    /**
-     * Reset each button in the grid to be blank and enabled.
-     */
-    private void resetButtons() {
-        TableLayout T = (TableLayout) findViewById(R.id.Grid);
-        for (int y = 0; y < T.getChildCount(); y++) {
-            if (T.getChildAt(y) instanceof TableRow) {
-                TableRow R = (TableRow) T.getChildAt(y);
-                for (int x = 0; x < R.getChildCount(); x++) {
-                    if (R.getChildAt(x) instanceof TextView) {
-                        TextView B = (TextView) R.getChildAt(x);
-                        B.setText("");
-                        B.setEnabled(true);
-                    }
-                }
-            }
-        }
-        txtGameStatus.setText(R.string.match);
-    }
-
-    /**
-     * Method that returns true when someone has won and false when nobody has.<br />
-     * It also display the winner on screen.
-     *
-     * @return
-     */
-    private boolean checkWin() {
-
-        char winner = '\0';
-        if (checkWinner(board, 3, 'X')) {
-            winner = 'X';
-        } else if (checkWinner(board, 3, 'O')) {
-            winner = 'O';
-        }
-
-        if (winner == '\0') {
-            return false; // nobody won
+        if (p1.equalsIgnoreCase(p2)) {
+            Toast.makeText(context, "Both players cannot choose same symbol", Toast.LENGTH_LONG).show();
+            finish();
         } else {
-            // display winner
-            TextView T = (TextView) findViewById(R.id.txtStatus);
-            T.setText(winner + " wins");
-            mediaPlayerWinning.start();
-            return true;
-        }
-    }
+
+            gridview = (GridView) findViewById(R.id.gridview1);
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.sub_item_hum, symbols);
+            gridview.setAdapter(adapter);
+
+            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    int flag = 0;
+                    t = (TextView) view.findViewById(R.id.txt);
+                    mediaPlayer.start();
+                    for (j = 0; j < 9; ++j) {
+                        if (visitedp1[position] == 1 || visitedp2[position] == 1) {
+                            flag = 1;
+                            Toast.makeText(context, "Invalid....", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                    }
+                    if (flag == 0) {
+
+                        if (i % 2 == 0) {
+                            //Toast.makeText(context,"Player1.....",50).show();
+                            t.setText(p1);
+                            visitedp1[position] = 1;
 
 
-    /**
-     * This is a generic algorithm for checking if a specific player has won on a tic tac toe board of any size.
-     *
-     * @param board  the board itself
-     * @param size   the width and height of the board
-     * @param player the player, 'X' or 'O'
-     * @return true if the specified player has won
-     */
-    private boolean checkWinner(char[][] board, int size, char player) {
-        // check each column
-        for (int x = 0; x < size; x++) {
-            int total = 0;
-            for (int y = 0; y < size; y++) {
-                if (board[x][y] == player) {
-                    total++;
-                }
-            }
-            if (total >= size) {
-                return true; // they win
-            }
-        }
+                        } else {
+                            //Toast.makeText(context,"Player2.....",50).show();
+                            t.setText(p2);
+                            visitedp2[position] = 1;
 
-        // check each row
-        for (int y = 0; y < size; y++) {
-            int total = 0;
-            for (int x = 0; x < size; x++) {
-                if (board[x][y] == player) {
-                    total++;
-                }
-            }
-            if (total >= size) {
-                return true; // they win
-            }
-        }
+                        }
+                        check(visitedp1, visitedp2);
+                        i = i + 1;
 
-        // forward diag
-        int total = 0;
-        for (int x = 0; x < size; x++) {
-            for (int y = 0; y < size; y++) {
-                if (x == y && board[x][y] == player) {
-                    total++;
-                }
-            }
-        }
-        if (total >= size) {
-            return true; // they win
-        }
-
-        // backward diag
-        total = 0;
-        for (int x = 0; x < size; x++) {
-            for (int y = 0; y < size; y++) {
-                if (x + y == size - 1 && board[x][y] == player) {
-                    total++;
-                }
-            }
-        }
-        if (total >= size) {
-            return true; // they win
-        }
-
-        return false; // nobody won
-    }
-
-    /**
-     * Disables all the buttons in the grid.
-     */
-    private void disableButtons() {
-        TableLayout T = (TableLayout) findViewById(R.id.Grid);
-        for (int y = 0; y < T.getChildCount(); y++) {
-            if (T.getChildAt(y) instanceof TableRow) {
-                TableRow R = (TableRow) T.getChildAt(y);
-                for (int x = 0; x < R.getChildCount(); x++) {
-                    if (R.getChildAt(x) instanceof TextView) {
-                        TextView B = (TextView) R.getChildAt(x);
-                        B.setEnabled(false);
                     }
                 }
-            }
-        }
-    }
+            });
 
-    /**
-     * This will add the OnClickListener to each button inside out TableLayout
-     */
-    private void setupOnClickListeners() {
-        TableLayout T = (TableLayout) findViewById(R.id.Grid);
-        for (int y = 0; y < T.getChildCount(); y++) {
-            if (T.getChildAt(y) instanceof TableRow) {
-                TableRow R = (TableRow) T.getChildAt(y);
-                for (int x = 0; x < R.getChildCount(); x++) {
-                    View V = R.getChildAt(x); // In our case this will be each button on the grid
-                    V.setOnClickListener(new PlayOnClick(x, y));
-                }
-            }
-        }
-    }
-
-    /**
-     * Custom OnClickListener for Noughts and Crosses<br />
-     * Each Button for Noughts and Crosses has a position we need to take into account
-     *
-     * @author Lyndon Armitage
-     */
-    private class PlayOnClick implements View.OnClickListener {
-
-        private int x = 0;
-        private int y = 0;
-
-        public PlayOnClick(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (view instanceof TextView) {
-                TextView B = (TextView) view;
-                board[x][y] = noughtsTurn ? 'O' : 'X';
-                B.setText(noughtsTurn ? "O" : "X");
-                B.setEnabled(false);
-                noughtsTurn = !noughtsTurn;
-                mediaPlayer.start();
-                // check if anyone has won
-                if (checkWin()) {
-                    disableButtons();
-                }
-            }
         }
     }
 }
-
