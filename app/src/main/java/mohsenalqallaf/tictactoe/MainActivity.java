@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,10 +16,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class MainActivity extends Activity {
     // declare variable
     private LinearLayout linWithCom, linWithHum;
     private TextView txtBlinkTitle;
+    private DatabaseHandler databaseHandler;
+    private List<PlayerInfo> playerInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +31,12 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         // initializing all views
         initializeViews();
+        // initializing Database
+        databaseHandler= new DatabaseHandler(this);
+        playerInfo = databaseHandler.getAllPlayers();
+        for (PlayerInfo info : playerInfo) {
+            txtBlinkTitle.setText("Welcome"+" "+ info.getName());
+        }
         Animation anim = new AlphaAnimation(0.0f, 1.0f);
         anim.setDuration(500); //You can manage the blinking time with this parameter
         anim.setStartOffset(20);

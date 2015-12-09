@@ -28,7 +28,7 @@ public class SplashActivity extends Activity {
             public void run() {
                 // This method will be executed once the timer is over
                 // Start your app level_two activity
-                Intent i = new Intent(SplashActivity.this, MainActivity.class);
+                Intent i = new Intent(SplashActivity.this, SignUpActivity.class);
                 startActivity(i);
 
                 // close this activity
