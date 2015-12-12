@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/button_color"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp">
+    <TextView
+        android:id="@+id/action_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dp"
+        android:textColor="@android:color/white"
+        android:paddingTop="5dp"/>
+    <TextView
+        android:id="@+id/action_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:paddingTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@android:color/white"
+        android:text="hello"
+        android:layout_marginRight="10dp"/>
+</LinearLayout>

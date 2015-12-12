@@ -77,6 +77,32 @@
                 android:textSize="16sp" />
 
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/lin_logs"
+            android:layout_width="188dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@color/button_color"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp">
+
+            <Button
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:text="Check User Logs"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+
+        </LinearLayout>
     </LinearLayout>
 
 

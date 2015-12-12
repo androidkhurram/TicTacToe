@@ -5,9 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -18,13 +22,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	// Database Name
 	private static final String DATABASE_NAME = "contactsManager";
 
-	// Contacts table name
+	// table names
 	private static final String TABLE_PLAYERS_LOGIN = "login";
-
-	// Contacts Table Columns names
+	private static final String TABLE_USER_LOGS = "user_logs";
+	// Table Columns names for player login
 	private static final String KEY_ID = "id";
 	private static final String KEY_USER_NAME = "user_name";
 	private static final String KEY_EMAIL_ID = "email_id";
+	// Table Columns names for player logs
+	private static final String KEY_CREATED_AT = "created_at";
+	private static final String KEY_USER_ACTIONS = "action_detail";
+
 
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -33,10 +41,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	// Creating Tables
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_PLAYERS_LOGIN + "("
+        // Log table create statement
+		String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_PLAYERS_LOGIN + "("
 				+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_USER_NAME + " TEXT,"
 				+ KEY_EMAIL_ID + " TEXT" + ")";
-		db.execSQL(CREATE_CONTACTS_TABLE);
+		// User Log table create statement
+		String CREATE_TABLE_LOG = "CREATE TABLE " + TABLE_USER_LOGS
+				+ "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_USER_ACTIONS + " TEXT,"
+				+ KEY_CREATED_AT + " DATETIME" + ")";
+		db.execSQL(CREATE_LOGIN_TABLE);
+		db.execSQL(CREATE_TABLE_LOG);
 	}
 
 	// Upgrading database
@@ -44,7 +58,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// Drop older table if existed
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLAYERS_LOGIN);
-
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_LOGS);
 		// Create tables again
 		onCreate(db);
 	}
@@ -59,8 +73,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		ContentValues values = new ContentValues();
 		values.put(KEY_USER_NAME, playerInfo.getName()); // PlayerInfo Name
-		values.put(KEY_EMAIL_ID, playerInfo.getEmailId()); // PlayerInfo Phone
-		System.out.println("new player value"+values);
+		values.put(KEY_EMAIL_ID, playerInfo.getEmailId()); // PlayerInfo Email
 		// Inserting Row
 		db.insert(TABLE_PLAYERS_LOGIN, null, values);
 		db.close(); // Closing database connection
@@ -124,7 +137,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public void deletePlayer(PlayerInfo playerInfo) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(TABLE_PLAYERS_LOGIN, KEY_ID + " = ?",
-				new String[] { String.valueOf(playerInfo.getID()) });
+				new String[]{String.valueOf(playerInfo.getID())});
 		db.close();
 	}
 
@@ -140,4 +153,46 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return cursor.getCount();
 	}
 
+	// Creating users logs
+	public void createUserLogs(UserLogs logs) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put(KEY_USER_ACTIONS, logs.getAction());
+		values.put(KEY_CREATED_AT, getDateTime());
+		System.out.println("player logs" + values);
+		// insert row
+		db.insert(TABLE_USER_LOGS, null, values);
+		db.close(); // Closing database connection
+	}
+	/**
+	 * getting all logs
+	 * */
+	public ArrayList<UserLogs> getAllLogs() {
+		ArrayList<UserLogs> userLogs = new ArrayList<UserLogs>();
+		String selectQuery = "SELECT  * FROM " + TABLE_USER_LOGS;
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (c.moveToFirst()) {
+			do {
+				UserLogs logs = new UserLogs();
+				logs.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+				logs.setAction(c.getString(c.getColumnIndex(KEY_USER_ACTIONS)));
+				logs.setCreated_at(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
+				// adding to logs list
+				userLogs.add(logs);
+			} while (c.moveToNext());
+		}
+		return userLogs;
+	}
+	/**
+	 * get datetime
+	 * */
+	private String getDateTime() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+		Date date = new Date();
+		return dateFormat.format(date);
+	}
 }

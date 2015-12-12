@@ -12,17 +12,23 @@ import android.widget.Button;
 public class SignUpActivity extends Activity{
     // declare variables
     private Button btnYes, btnNo;
+    private DatabaseHandler databaseHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup);
         // initializeViews views
         initializeViews();
+        // initializing Database and bean class
+        databaseHandler = new DatabaseHandler(this);
         // implementing onclick listeners
         btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+                UserLogs logs= new UserLogs();
+                logs.setAction("User clicked on have account.");
+                databaseHandler.createUserLogs(logs);
                 Intent intent= new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
@@ -31,6 +37,9 @@ public class SignUpActivity extends Activity{
             @Override
             public void onClick(View v) {
                 finish();
+                UserLogs logs= new UserLogs();
+                logs.setAction("User clicked on don't have account.");
+                databaseHandler.createUserLogs(logs);
                 Intent intent= new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
             }

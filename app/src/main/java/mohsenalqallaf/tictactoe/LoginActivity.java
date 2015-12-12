@@ -33,12 +33,19 @@ public class LoginActivity extends Activity {
                 playerInfo.setName(editUserName.getText().toString());
                 playerInfo.setEmailId(editEmailId.getText().toString());
                 db.addNewPlayer(playerInfo);
+
                 if (editEmailId.getText().toString().isEmpty() ||
                         editUserName.getText().toString().isEmpty())
                 {
                     Toast.makeText(getApplicationContext(),
                             "Please Enter Your Record First!!!", Toast.LENGTH_LONG).show();
+                    UserLogs logs= new UserLogs();
+                    logs.setAction("User entered wrong credentials.");
+                    db.createUserLogs(logs);
                 } else {
+                    UserLogs logs= new UserLogs();
+                    logs.setAction("User successfully loged in.");
+                    db.createUserLogs(logs);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                 }
@@ -49,6 +56,9 @@ public class LoginActivity extends Activity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                UserLogs logs= new UserLogs();
+                logs.setAction("User cancelled login screen.");
+                db.createUserLogs(logs);
                 finish();
             }
         });

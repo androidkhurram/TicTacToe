@@ -20,7 +20,7 @@ import java.util.List;
 
 public class MainActivity extends Activity {
     // declare variable
-    private LinearLayout linWithCom, linWithHum;
+    private LinearLayout linWithCom, linWithHum, linLogs;
     private TextView txtBlinkTitle;
     private DatabaseHandler databaseHandler;
     private List<PlayerInfo> playerInfo;
@@ -47,6 +47,9 @@ public class MainActivity extends Activity {
         linWithCom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                UserLogs logs= new UserLogs();
+                logs.setAction("User clicked on play with computer.");
+                databaseHandler.createUserLogs(logs);
                 Intent intent = new Intent(getApplicationContext(),
                         LevelOneActivity.class);
                 startActivity(intent);
@@ -56,8 +59,22 @@ public class MainActivity extends Activity {
         linWithHum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                UserLogs logs= new UserLogs();
+                logs.setAction("User clicked on play with human.");
+                databaseHandler.createUserLogs(logs);
                 Intent intent = new Intent(getApplicationContext(),
                         PlayerDetailActivity.class);
+                startActivity(intent);
+            }
+        });
+        linLogs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserLogs logs= new UserLogs();
+                logs.setAction("User clicked on see logs.");
+                databaseHandler.createUserLogs(logs);
+                Intent intent = new Intent(getApplicationContext(),
+                        LogsActivity.class);
                 startActivity(intent);
             }
         });
@@ -67,6 +84,7 @@ public class MainActivity extends Activity {
     private void initializeViews() {
         linWithCom = (LinearLayout) findViewById(R.id.lin_withcom);
         linWithHum = (LinearLayout) findViewById(R.id.lin_withhum);
+        linLogs = (LinearLayout) findViewById(R.id.lin_logs);
         txtBlinkTitle = (TextView) findViewById(R.id.txtHeading);
     }
 
